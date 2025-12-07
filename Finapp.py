@@ -86,8 +86,6 @@ else:
         st.error("❌ No se encontró el archivo 'Tracking.xlsx' en la carpeta FinApp.")
 
 
-    st.write("📊 **Base consolidada:**")
-    st.dataframe(df_tracking, use_container_width=True)
 
 # Calcular métricas
 df_tracking["Fecha"] = pd.to_datetime(df_tracking["Fecha"], dayfirst=True, errors='coerce')
@@ -123,3 +121,5 @@ with c9:
     st.metric(label="🚨 Balance", value=f"${balance:,.2f}")
 
 
+st.write("📊 **Base consolidada:**")
+st.dataframe(df_tracking, use_container_width=True)
