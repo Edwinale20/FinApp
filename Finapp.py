@@ -104,8 +104,6 @@ balance = total_ingresos - total_gasto_fijo
 #st.metric("Balance", f"${balance:,.2f}")
 
 
-st.divider()
-st.subheader(':orange[Comparación de Venta perdida por Mercado y División]')    
 
 c7, c8, c9 = st.columns([4,3,4])
 
@@ -120,6 +118,6 @@ with c8:
 with c9: 
     st.metric(label="🚨 Balance", value=f"${balance:,.0f}")
 
-
+st.divider()
 st.write("📊 **Base consolidada:**")
 st.dataframe(df_tracking, use_container_width=True)
