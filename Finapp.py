@@ -97,16 +97,7 @@ total_gasto_fijo = df_tracking[df_tracking["Concepto"] == "Gasto"]["Monto"].sum(
 balance = total_ingresos - total_gasto_fijo 
 
 
-
-#st.subheader(f"📊 Resumen del mes: {mes_actual}")
-#st.metric("Ingresos", f"${total_ingresos:,.2f}")
-#st.metric("Gastos Fijos", f"${total_gasto_fijo:,.2f}")
-#st.metric("Balance", f"${balance:,.2f}")
-
-
-
 c7, c8, c9 = st.columns([4,3,4])
-
 with c7:
     total_ingresos = df_tracking[df_tracking["Concepto"] == "Ingreso"]["Monto"].sum()    
     st.metric(label="🚨 Ingresos", value=f"${total_ingresos:,.0f}")
@@ -121,3 +112,35 @@ with c9:
 st.divider()
 st.write("📊 **Base consolidada:**")
 st.dataframe(df_tracking, use_container_width=True)
+
+
+def figura1():
+
+    df_tracking["Fecha"] = pd.to_datetime(df_tracking["Fecha"], dayfirst=True, errors="coerce")
+
+    # Agrupar ingresos y gasto total por día
+    total_ingresos = df_tracking[df_tracking["Concepto"] == "Ingreso"]["Monto"].sum()
+    total_gasto_fijo = df_tracking[df_tracking["Concepto"] == "Gasto"]["Monto"].sum()
+    #balance = total_ingresos - total_gasto_fijo 
+
+    # Gráfica de líneas con ingreso, gasto total y balance
+    fig = px.line(
+        total_ingresos, total_gasto_fijo,
+        x="Fecha",
+        y=["total_ingresos", "total_gasto_fijo"],
+        title="Balance diario: ingresos vs gastos",
+        markers=True,
+        labels={"value": "Monto ($)", "variable": "Concepto"},
+    )
+
+    fig.update_layout(title_x=0.5)
+    return fig
+
+figura1 = figura1()
+
+
+c1, c2, c3 = st.columns([4, 3, 4])
+with c1:
+    st.plotly_chart(figura1, use_container_width=True)
+
+
