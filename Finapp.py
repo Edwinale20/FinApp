@@ -137,7 +137,7 @@ def figura1():
     fig.update_layout(title_x=0.5)
     return fig
 
-figura1 = figura1()
+#figura1 = figura1()
 
 
 c1, c2, c3 = st.columns([4, 3, 4])
