@@ -99,10 +99,10 @@ balance = total_ingresos - total_gasto_fijo
 
 
 
-st.subheader(f"📊 Resumen del mes: {mes_actual}")
-st.metric("Ingresos", f"${total_ingresos:,.2f}")
-st.metric("Gastos Fijos", f"${total_gasto_fijo:,.2f}")
-st.metric("Balance", f"${balance:,.2f}")
+#st.subheader(f"📊 Resumen del mes: {mes_actual}")
+#st.metric("Ingresos", f"${total_ingresos:,.2f}")
+#st.metric("Gastos Fijos", f"${total_gasto_fijo:,.2f}")
+#st.metric("Balance", f"${balance:,.2f}")
 
 
 with kpi_top:
