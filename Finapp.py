@@ -90,6 +90,9 @@ else:
     st.dataframe(df_tracking, use_container_width=True)
 
 # Calcular métricas
+df["Fecha"] = pd.to_datetime(df["Fecha"], dayfirst=True, errors='coerce')
+mes_actual = df["Fecha"].dt.month_name().mode()[0]
+
 total_ingresos = df_tracking[df_tracking["Concepto"] == 'Ingreso']
 total_gasto_fijo = df_tracking[df_tracking["Concepto"] == 'Gasto']
 balance = total_ingresos - total_gasto_fijo 
