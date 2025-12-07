@@ -119,8 +119,7 @@ with c8:
     total_gasto_fijo = df_tracking[df_tracking["Concepto"] == "Gasto"]["Monto"].sum()    
     st.metric(label="🚨 Gastos", value=total_gasto_fijo)
 
-with c9:
-    balance 
-    st.metric("📊 Balance")
+with c9: 
+    st.metric(label="🚨 Balance", value=balance)
 
 
