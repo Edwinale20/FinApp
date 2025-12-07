@@ -124,17 +124,24 @@ def figura1():
     total_gasto_fijo = df_tracking[df_tracking["Concepto"] == "Gasto"]["Monto"].sum()
     #balance = total_ingresos - total_gasto_fijo 
 
-    # Gráfica de líneas con ingreso, gasto total y balance
-    fig = px.line(
-        total_ingresos, total_gasto_fijo,
-        x="Fecha",
-        y=["total_ingresos", "total_gasto_fijo"],
-        title="Balance diario: ingresos vs gastos",
-        markers=True,
-        #labels={"value": "Monto ($)", "variable": "Concepto"},
+    # Construimos un DataFrame para graficar
+    df_plot = pd.DataFrame({
+        "Concepto": ["Ingreso", "Gasto fijo"],
+        "Monto": [total_ingresos, total_gasto_fijo]
+    })
+
+    # Ahora sí, gráfico de barras
+    fig = px.bar(
+        df_plot,
+        x="Concepto",
+        y="Monto",
+        text="Monto",
+        title="Ingresos vs Gastos Totales"
     )
 
-    fig.update_layout(title_x=0.5)
+    fig.update_traces(texttemplate="$%{text:,.0f}", textposition="outside")
+    fig.update_layout(title_x=0.5, yaxis_title="Monto ($)")
+
     return fig
 
 #figura1 = figura1()
