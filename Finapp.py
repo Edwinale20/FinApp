@@ -144,7 +144,7 @@ def figura1():
 
     return fig
 
-#figura1 = figura1()
+figura1_grafica = figura1()
 
 
 c1, c2, c3 = st.columns([4, 3, 4])
