@@ -149,6 +149,6 @@ figura1_grafica = figura1()
 
 c1, c2, c3 = st.columns([4, 3, 4])
 with c1:
-    st.plotly_chart(figura1, use_container_width=True)
+    st.plotly_chart(figura1_grafica, use_container_width=True)
 
 
