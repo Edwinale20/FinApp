@@ -105,22 +105,21 @@ balance = total_ingresos - total_gasto_fijo
 #st.metric("Balance", f"${balance:,.2f}")
 
 
-with kpi_top:
-    c7, c8, c9 = st.columns([4,3,4])
+st.divider()
+st.subheader(':orange[Comparación de Venta perdida por Mercado y División]')    
 
-    # Artículo en %
-    with c7:
-        total_ingresos = df_tracking[df_tracking["Concepto"] == 'Ingreso']
-        st.metric("🚨 Ingresos)", f"{pct:.2f}%", delta=nombre)
+c7, c8, c9 = st.columns([4,3,4])
 
-    # Plaza en $
-    with c8:
-        total_gasto_fijo = df_tracking[df_tracking["Concepto"] == 'Gasto']
-        st.metric("🏬 Suma de gastos fijos", f"${vp:,.0f}", delta=nombre)
+with c7:
+    total_ingresos = df_tracking[df_tracking["Concepto"] == 'Ingreso']
+    st.metric("🚨 Ingresos)", f"{pct:.2f}%", delta=nombre)
 
-    # Mercado en $
-    with c9:
-        balance = total_ingresos - total_gasto_fijo
-        st.metric("📊 Balance", f"${vp:,.0f}", delta=nombre)
+with c8:
+    total_gasto_fijo = df_tracking[df_tracking["Concepto"] == 'Gasto']
+    st.metric("🏬 Suma de gastos fijos", f"${vp:,.0f}", delta=nombre)
+
+with c9:
+    balance = total_ingresos - total_gasto_fijo
+    st.metric("📊 Balance", f"${vp:,.0f}", delta=nombre)
 
 
