@@ -4,9 +4,9 @@ import pandas as pd
 import openpyxl
 import io
 
-st.set_page_config(page_title="FinApp", page_icon="🏪")
+st.set_page_config(page_title="FinApp", page_icon="💸")
 
-st.title("🏪 FinApp de Pepe")
+st.title("💸 FinApp de Pepe")
 st.markdown("✅ Datos en tiempo real", unsafe_allow_html=True)
 st.markdown("🧮 KPI´s principales", unsafe_allow_html=True)
 
@@ -76,15 +76,16 @@ else:
 
     files = list_excel_files(access_token)
 
-    venta_semanal = []
+    # Buscar el archivo específico llamado Tracking.xlsx
+    tracking_file = next((f for f in files if f["name"] == "Tracking.xlsx"), None)
 
-    for f in files:
-        df = download_excel_df(access_token, f["id"])
-        # Debug opcional:
-        # st.write(f"Archivo: {f['name']} — Shape {df.shape}")
-        venta_semanal.append(df)
+    if tracking_file:
+        df_tracking = download_excel_df(access_token, tracking_file["id"])
+        st.success("✅ Archivo 'Tracking.xlsx' cargado correctamente.")
+        st.dataframe(df_tracking, use_container_width=True)
+    else:
+        st.error("❌ No se encontró el archivo 'Tracking.xlsx' en la carpeta FinApp.")
 
-    VENTA = venta(venta_semanal)
 
     st.write("📊 **Base consolidada:**")
-    st.dataframe(VENTA, use_container_width=True)
+    st.dataframe(df_tracking, use_container_width=True)
