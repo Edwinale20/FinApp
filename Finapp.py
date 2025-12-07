@@ -93,8 +93,9 @@ else:
 df_tracking["Fecha"] = pd.to_datetime(df_tracking["Fecha"], dayfirst=True, errors='coerce')
 mes_actual = df_tracking["Fecha"].dt.month_name().mode()[0]
 
-total_ingresos = df_tracking[df_tracking["Concepto"] == 'Ingreso']
-total_gasto_fijo = df_tracking[df_tracking["Concepto"] == 'Gasto']
+
+total_ingresos = df_tracking[df_tracking["Concepto"] == "Ingreso"]["Monto"].sum()
+total_gasto_fijo = df_tracking[df_tracking["Concepto"] == "Gasto"]["Monto"].sum()
 balance = total_ingresos - total_gasto_fijo 
 
 
@@ -111,15 +112,15 @@ st.subheader(':orange[Comparación de Venta perdida por Mercado y División]')
 c7, c8, c9 = st.columns([4,3,4])
 
 with c7:
-    total_ingresos = df_tracking[df_tracking["Concepto"] == "Ingreso"]
+    total_ingresos = df_tracking[df_tracking["Concepto"] == "Ingreso"]["Monto"].sum()    
     st.metric(label="🚨 Ingresos", value=total_ingresos)
 
 with c8:
-    total_gasto_fijo = df_tracking[df_tracking["Concepto"] == "Gasto"]
-    st.metric(label="🚨 Ingresos", value=total_gasto_fijo)
+    total_gasto_fijo = df_tracking[df_tracking["Concepto"] == "Gasto"]["Monto"].sum()    
+    st.metric(label="🚨 Gastos", value=total_gasto_fijo)
 
 with c9:
-    balance = total_ingresos - total_gasto_fijo
+    balance 
     st.metric("📊 Balance")
 
 
