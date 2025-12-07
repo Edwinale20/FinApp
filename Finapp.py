@@ -112,7 +112,6 @@ with c9:
 
 st.divider()
 st.write("📊 **Base consolidada:**")
-st.dataframe(df_tracking, use_container_width=True)
 
 
 
