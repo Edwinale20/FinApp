@@ -117,31 +117,24 @@ st.dataframe(df_tracking, use_container_width=True)
 
 def figura1():
 
+def figura1():
+    
     df_tracking["Fecha"] = pd.to_datetime(df_tracking["Fecha"], dayfirst=True, errors="coerce")
 
-    # Agrupar ingresos y gasto total por día
-    total_ingresos = df_tracking[df_tracking["Concepto"] == "Ingreso"]["Monto"].sum()
-    total_gasto_fijo = df_tracking[df_tracking["Concepto"] == "Gasto"]["Monto"].sum()
-    #balance = total_ingresos - total_gasto_fijo 
+    df_filtrado = df_tracking[df_tracking["Concepto"].isin(["Ingreso", "Gasto"])]
 
-    # Construimos un DataFrame para graficar
-    df_plot = pd.DataFrame({
-        "Concepto": ["Ingreso", "Gasto fijo"],
-        "Monto": [total_ingresos, total_gasto_fijo]
-    })
+    df_diario = df_filtrado.groupby(["Fecha", "Concepto"]).sum().reset_index()
 
-    # Ahora sí, gráfico de barras
     fig = px.line(
-        df_plot,
-        x="Concepto",
+        df_diario,
+        x="Fecha",
         y="Monto",
-        text="Monto",
-        title="Ingresos vs Gastos Totales"
+        color="Concepto",
+        title="Balance diario: ingresos vs gastos",
+        markers=True
     )
 
-    fig.update_traces(texttemplate="$%{text:,.0f}", textposition="outside")
-    fig.update_layout(title_x=0.5, yaxis_title="Monto ($)")
-
+    fig.update_layout(title_x=0.5)
     return fig
 
 figura1_grafica = figura1()
