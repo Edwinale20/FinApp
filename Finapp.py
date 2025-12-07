@@ -131,7 +131,7 @@ def figura1():
         y=["total_ingresos", "total_gasto_fijo"],
         title="Balance diario: ingresos vs gastos",
         markers=True,
-        labels={"value": "Monto ($)", "variable": "Concepto"},
+        #labels={"value": "Monto ($)", "variable": "Concepto"},
     )
 
     fig.update_layout(title_x=0.5)
