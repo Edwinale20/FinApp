@@ -112,11 +112,11 @@ c7, c8, c9 = st.columns([4,3,4])
 
 with c7:
     total_ingresos = df_tracking[df_tracking["Concepto"] == "Ingreso"]
-    st.metric(label="🚨 Ingresos", value=f"${total_ingresos:,.2f}")
+    st.metric(label="🚨 Ingresos", value=total_ingresos)
 
 with c8:
     total_gasto_fijo = df_tracking[df_tracking["Concepto"] == "Gasto"]
-    st.metric(label="🚨 Ingresos", value=f"${total_gasto_fijo:,.2f}")
+    st.metric(label="🚨 Ingresos", value=total_gasto_fijo)
 
 with c9:
     balance = total_ingresos - total_gasto_fijo
