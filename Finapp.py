@@ -131,7 +131,7 @@ def figura1():
     })
 
     # Ahora sí, gráfico de barras
-    fig = px.bar(
+    fig = px.line(
         df_plot,
         x="Concepto",
         y="Monto",
