@@ -88,3 +88,36 @@ else:
 
     st.write("📊 **Base consolidada:**")
     st.dataframe(df_tracking, use_container_width=True)
+
+# Calcular métricas
+total_ingresos = df[df["Concepto"] == 'Ingreso']
+total_gasto_fijo = df[df["Concepto"] == 'Gasto']
+balance = total_ingresos - total_gasto_fijo 
+
+
+
+st.subheader(f"📊 Resumen del mes: {mes_actual}")
+st.metric("Ingresos", f"${total_ingresos:,.2f}")
+st.metric("Gastos Fijos", f"${total_gasto_fijo:,.2f}")
+st.metric("Balance", f"${balance:,.2f}")
+
+
+with kpi_top:
+    c7, c8, c9 = st.columns([4,3,4])
+
+    # Artículo en %
+    with c7:
+        nombre, pct = kpis["total_ingresos"]
+        st.metric("🚨 Ingresos)", f"{pct:.2f}%", delta=nombre)
+
+    # Plaza en $
+    with c8:
+        nombre, vp = kpis["total_gasto_fijo"]
+        st.metric("🏬 Suma de gastos fijos", f"${vp:,.0f}", delta=nombre)
+
+    # Mercado en $
+    with c9:
+        nombre, vp = kpis["balance"]
+        st.metric("📊 Balance", f"${vp:,.0f}", delta=nombre)
+
+
