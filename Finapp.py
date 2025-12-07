@@ -120,6 +120,6 @@ with c8:
     st.metric(label="🚨 Gastos", value=f"${total_gasto_fijo:,.2f}")
 
 with c9: 
-    st.metric(label="🚨 Balance", value=balance)
+    st.metric(label="🚨 Balance", value=f"${balance:,.2f}")
 
 
