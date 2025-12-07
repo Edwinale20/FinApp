@@ -115,10 +115,8 @@ st.write("📊 **Base consolidada:**")
 st.dataframe(df_tracking, use_container_width=True)
 
 
-def figura1():
 
 def figura1():
-    
     df_tracking["Fecha"] = pd.to_datetime(df_tracking["Fecha"], dayfirst=True, errors="coerce")
 
     df_filtrado = df_tracking[df_tracking["Concepto"].isin(["Ingreso", "Gasto"])]
