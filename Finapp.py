@@ -90,8 +90,8 @@ else:
     st.dataframe(df_tracking, use_container_width=True)
 
 # Calcular métricas
-total_ingresos = df[df["Concepto"] == 'Ingreso']
-total_gasto_fijo = df[df["Concepto"] == 'Gasto']
+total_ingresos = df_tracking[df_tracking["Concepto"] == 'Ingreso']
+total_gasto_fijo = df_tracking[df_tracking["Concepto"] == 'Gasto']
 balance = total_ingresos - total_gasto_fijo 
 
 
@@ -107,17 +107,17 @@ with kpi_top:
 
     # Artículo en %
     with c7:
-        nombre, pct = kpis["total_ingresos"]
+        total_ingresos = df_tracking[df_tracking["Concepto"] == 'Ingreso']
         st.metric("🚨 Ingresos)", f"{pct:.2f}%", delta=nombre)
 
     # Plaza en $
     with c8:
-        nombre, vp = kpis["total_gasto_fijo"]
+        total_gasto_fijo = df_tracking[df_tracking["Concepto"] == 'Gasto']
         st.metric("🏬 Suma de gastos fijos", f"${vp:,.0f}", delta=nombre)
 
     # Mercado en $
     with c9:
-        nombre, vp = kpis["balance"]
+        balance = total_ingresos - total_gasto_fijo
         st.metric("📊 Balance", f"${vp:,.0f}", delta=nombre)
 
 
