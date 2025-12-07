@@ -82,7 +82,6 @@ else:
     if tracking_file:
         df_tracking = download_excel_df(access_token, tracking_file["id"])
         st.success("✅ Archivo 'Tracking.xlsx' cargado correctamente.")
-        st.dataframe(df_tracking, use_container_width=True)
     else:
         st.error("❌ No se encontró el archivo 'Tracking.xlsx' en la carpeta FinApp.")
 
