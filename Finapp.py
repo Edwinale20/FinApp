@@ -111,11 +111,11 @@ c7, c8, c9 = st.columns([4,3,4])
 
 with c7:
     total_ingresos = df_tracking[df_tracking["Concepto"] == "Ingreso"]["Monto"].sum()    
-    st.metric(label="🚨 Ingresos", value=f"${total_ingresos:,.2f}")
+    st.metric(label="🚨 Ingresos", value=f"${total_ingresos:,.0f}")
 
 with c8:
     total_gasto_fijo = df_tracking[df_tracking["Concepto"] == "Gasto"]["Monto"].sum()    
-    st.metric(label="🚨 Gastos", value=f"${total_gasto_fijo:,.2f}")
+    st.metric(label="🚨 Gastos", value=f"${total_gasto_fijo:,.0f}")
 
 with c9: 
     st.metric(label="🚨 Balance", value=f"${balance:,.0f}")
