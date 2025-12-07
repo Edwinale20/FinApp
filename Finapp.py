@@ -111,12 +111,12 @@ st.subheader(':orange[Comparación de Venta perdida por Mercado y División]')
 c7, c8, c9 = st.columns([4,3,4])
 
 with c7:
-    total_ingresos = df_tracking[df_tracking["Concepto"] == 'Ingreso']
-    st.metric("🚨 Ingresos)")
+    total_ingresos = df_tracking[df_tracking["Concepto"] == "Ingreso"].sum()
+    st.metric(label="🚨 Ingresos", value=f"${total_ingresos:,.2f}")
 
 with c8:
-    total_gasto_fijo = df_tracking[df_tracking["Concepto"] == 'Gasto']
-    st.metric("🏬 Suma de gastos fijos")
+    total_gasto_fijo = df_tracking[df_tracking["Concepto"] == "Gasto"].sum()
+    st.metric(label="🚨 Ingresos", value=f"${total_gasto_fijo:,.2f}")
 
 with c9:
     balance = total_ingresos - total_gasto_fijo
