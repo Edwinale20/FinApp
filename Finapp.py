@@ -182,7 +182,6 @@ def figura3():
         barmode='stack',
         title_font=dict(size=20),
         #height=400,
-        barmode="stack"
     )
     
     return fig
