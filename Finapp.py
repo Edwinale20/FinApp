@@ -79,7 +79,7 @@ else:
 
     # Buscar el archivo específico llamado Tracking.xlsx
     tracking_file = next((f for f in files if f["name"] == "Tracking.xlsx"), None)
-
+    
     if tracking_file:
         df_tracking = download_excel_df(access_token, tracking_file["id"])
         st.success("✅ Archivo 'Tracking.xlsx' cargado correctamente.")
@@ -154,7 +154,7 @@ def figura2():
         markers=True
     )
 
-    fig.update_layout(title_x=0.5)
+    fig.update_layout(ttitle_font=dict(size=20))
     return fig
 
 
