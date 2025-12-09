@@ -66,6 +66,7 @@ else:
     
     if tracking_file:
         df_tracking = download_excel_df(access_token, tracking_file["id"])
+        #df_tracking2 = download_excel_df(access_token, tracking_file["id"], sheet_name="Deudas")  # segunda hoja
         st.success("✅ Archivo 'Tracking.xlsx' cargado correctamente.")
     else:
         st.error("❌ No se encontró el archivo 'Tracking.xlsx' en la carpeta FinApp.")
