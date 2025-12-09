@@ -156,6 +156,8 @@ def figura2():
 
     fig.update_layout(title_x=0.5)
     return fig
+
+
 # -----------------------------------------------------------------------------------------------------------------------------
 
 def figura3():
@@ -169,7 +171,7 @@ def figura3():
         x="Concepto",
         y="Monto",
         color="Concepto",
-        text="Monto a pagar",
+        text="Montor",
         title="Tracking de deudas",
         #labels={'VENTA_PERDIDA_PESOS': 'Venta Perdida en Pesos (M)'},
         #hover_data={'% Venta Perdida': ':.1f'}
@@ -197,6 +199,7 @@ with c1:
 
 with c2:
     st.plotly_chart(figura2_grafica, use_container_width=True)
+
 with c3:
     st.plotly_chart(figura3_grafica, use_container_width=True)
 
