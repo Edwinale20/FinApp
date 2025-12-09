@@ -132,7 +132,7 @@ def figura1():
         markers=True
     )
 
-    fig.update_layout(title_x=0.5)
+    fig.update_layout(title_font=dict(size=20))
     return fig
 
 
