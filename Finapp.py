@@ -46,22 +46,6 @@ def download_excel_df(access_token, file_id):
     content = requests.get(url, headers=headers).content
     return pd.read_excel(io.BytesIO(content))
 
-@st.cache_data
-def venta(venta_semanal):
-    concat_venta = pd.DataFrame()
-
-    for df2 in venta_semanal:
-        df2 = df2.loc[:, ~df2.columns.str.contains('^Unnamed')]
-
-        if "Semana Contable" not in df2.columns:
-            continue
-
-        df2["Semana Contable"] = df2["Semana Contable"].astype(str)
-        columnas_a_eliminar = ['Metrics']
-        df2 = df2.drop(columns=[col for col in columnas_a_eliminar if col in df2.columns], errors='ignore')
-        concat_venta = pd.concat([concat_venta, df2], ignore_index=True)
-
-    return concat_venta
 
 
 # -----------------------------------------------------------------------------------------------------------------------------
@@ -110,8 +94,6 @@ with c8:
 with c9: 
     st.metric(label="🚨 Balance", value=f"${balance:,.0f}")
 
-st.divider()
-st.write("📊 **Base consolidada:**")
 
 # -----------------------------------------------------------------------------------------------------------------------------
 
