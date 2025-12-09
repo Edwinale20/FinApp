@@ -158,7 +158,7 @@ def figura2():
     return fig
 # -----------------------------------------------------------------------------------------------------------------------------
 
-def grafica3():
+def figura3():
     # Leer datos
     df_tracking
     df_grafica3 = df_tracking.groupby(["Concepto"])["Monto"].sum().reset_index()
