@@ -64,7 +64,7 @@ def venta(venta_semanal):
     return concat_venta
 
 
-# ------------------------------------------------------
+# -----------------------------------------------------------------------------------------------------------------------------
 
 token = get_access_token()
 
@@ -113,6 +113,7 @@ with c9:
 st.divider()
 st.write("📊 **Base consolidada:**")
 
+# -----------------------------------------------------------------------------------------------------------------------------
 
 
 def figura1():
@@ -134,11 +135,69 @@ def figura1():
     fig.update_layout(title_x=0.5)
     return fig
 
-figura1_grafica = figura1()
 
+# -----------------------------------------------------------------------------------------------------------------------------
+
+def figura2():
+    df_tracking["Fecha"] = pd.to_datetime(df_tracking["Fecha"], dayfirst=True, errors="coerce")
+
+    df_filtrado = df_tracking[df_tracking["Concepto"].isin(["Ingreso", "Gasto"])]
+
+    df_diario = df_filtrado.groupby(["Fecha", "Concepto"]).sum().reset_index()
+
+    fig = px.line(
+        df_diario,
+        x="Fecha",
+        y="Monto",
+        color="Concepto",
+        title="Balance diario: ingresos vs gastos",
+        markers=True
+    )
+
+    fig.update_layout(title_x=0.5)
+    return fig
+# -----------------------------------------------------------------------------------------------------------------------------
+
+def grafica3():
+    # Leer datos
+    df_tracking
+    df_grafica3 = df_tracking.groupby(["Concepto"])["Monto"].sum().reset_index()
+
+    # Crear gráfica
+    fig = px.bar(
+        df_grafica3,
+        x="Concepto",
+        y="Monto",
+        color="Concepto",
+        text="Monto a pagar",
+        title="Tracking de deudas",
+        #labels={'VENTA_PERDIDA_PESOS': 'Venta Perdida en Pesos (M)'},
+        #hover_data={'% Venta Perdida': ':.1f'}
+    )
+
+    fig.update_layout(
+        xaxis_title="Concepto",
+        yaxis_title="Monto ($)",
+        #title_x=0.5,
+        barmode='stack',
+        title_font=dict(size=20),
+        #height=400,
+        barmode="stack",
+    )
+    
+    return fig
+
+
+figura1_grafica = figura1()
+figura2_grafica = figura2()
+figura3_grafica = figura3()
 
 c1, c2, c3 = st.columns([4, 3, 4])
 with c1:
     st.plotly_chart(figura1_grafica, use_container_width=True)
 
+with c2:
+    st.plotly_chart(figura2_grafica, use_container_width=True)
+with c3:
+    st.plotly_chart(figura3_grafica, use_container_width=True)
 
