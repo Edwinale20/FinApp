@@ -190,15 +190,15 @@ def figura3():
 
 
 figura1_grafica = figura1()
-figura2_grafica = figura2()
+#figura2_grafica = figura2()
 figura3_grafica = figura3()
 
 c1, c2, c3 = st.columns([4, 3, 4])
 with c1:
     st.plotly_chart(figura1_grafica, use_container_width=True)
 
-with c2:
-    st.plotly_chart(figura2_grafica, use_container_width=True)
+#with c2:
+    #st.plotly_chart(figura2_grafica, use_container_width=True)
 
 with c3:
     st.plotly_chart(figura3_grafica, use_container_width=True)
