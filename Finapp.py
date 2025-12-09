@@ -163,6 +163,7 @@ def figura2():
 def figura3():
     # Leer datos
     df_tracking
+    df_filtrado = df_tracking[df_tracking["Concepto"].isin(["Ingreso", "Gasto"])]
     df_grafica3 = df_tracking.groupby(["Concepto"])["Monto"].sum().reset_index()
 
     # Crear gráfica
