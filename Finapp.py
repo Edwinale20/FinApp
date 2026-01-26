@@ -120,24 +120,39 @@ def figura1():
 
 
 # -----------------------------------------------------------------------------------------------------------------------------
-
+#Ejemplo de una buena grafica de barras!!!
 def figura2():
     df_tracking["Fecha"] = pd.to_datetime(df_tracking["Fecha"], dayfirst=True, errors="coerce")
 
-    df_filtrado = df_tracking[df_tracking["Concepto"].isin(["Ingreso", "Gasto"])]
+    df_gastos = df_tracking[df_tracking["Concepto"] == "Gasto"].copy()
+    df_gastos["Mes"] = df_gastos["Fecha"].dt.to_period("M").astype(str)
 
-    df_diario = df_filtrado.groupby(["Fecha", "Concepto"]).sum().reset_index()
+    df_mes_cat = df_gastos.groupby(["Mes", "Categoría"])["Monto"].sum().reset_index()
+    
+    custom_colors = [
+        '#00712D', '#FF9800', '#000080', '#FF6347', '#000000',
+        '#FFD700', '#008080', '#CD5C5C', '#FF7F50', '#006400',
+        '#8B0000', '#FFDEAD', '#ADFF2F', '#2F4F4F', '#33A85C']
+    
 
-    fig = px.line(
-        df_diario,
-        x="Fecha",
+    fig = px.bar(
+        df_mes_cat,
+        x="Mes",
         y="Monto",
-        color="Concepto",
-        title="Balance diario: ingresos vs gastos",
-        markers=True
-    )
+        title="Gastos por mes por categoría",
+        text="Monto",
+        color='Categoría',  # Usamos DESCRIPCIÓN en lugar de ARTICULO
+        color_discrete_sequence = ['#007074', '#FFBF00', '#9694FF', '#222831', '#004225', '#1230AE', '#8D0B41', '#522258', 
+         '#1F7D53', '#EB5B00', '#0D1282', '#09122C', '#ADFF2F', '#2F4F4F', "#7C00FE", "#D10363", "#16404D"],)
 
-    fig.update_layout(ttitle_font=dict(size=20))
+
+    fig.update_layout(title_font=dict(size=20))
+
+    fig.update_traces(
+        texttemplate='$%{text:,.0f}', 
+        textposition='outside',
+        hovertemplate='Mes: %{x}<br>Gasto: $%{y:,.0f}<extra>%{fullData.name}</extra>' )  
+
     return fig
 
 
@@ -173,15 +188,15 @@ def figura3():
 
 
 figura1_grafica = figura1()
-#figura2_grafica = figura2()
+figura2_grafica = figura2()
 figura3_grafica = figura3()
 
 c1, c2, c3 = st.columns([4, 3, 4])
 with c1:
     st.plotly_chart(figura1_grafica, use_container_width=True)
 
-#with c2:
-    #st.plotly_chart(figura2_grafica, use_container_width=True)
+with c2:
+    st.plotly_chart(figura2_grafica, use_container_width=True)
 
 with c3:
     st.plotly_chart(figura3_grafica, use_container_width=True)
