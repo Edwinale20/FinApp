@@ -5,7 +5,7 @@ import openpyxl
 import io
 import plotly.express as px
 
-st.set_page_config(page_title="FinApp", page_icon="💸")
+st.set_page_config(page_title="FinApp", page_icon="💸", layour="Wide")
 
 st.title("💸 FinApp de Pepe")
 st.markdown("✅ Datos en tiempo real", unsafe_allow_html=True)
