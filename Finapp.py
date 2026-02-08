@@ -54,7 +54,7 @@ token = get_access_token()
 
 if "access_token" not in token:
     st.error("❌ Error obteniendo access_token")
-
+    st.code(token)
 else:
     access_token = token["access_token"]
 
