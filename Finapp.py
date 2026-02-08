@@ -54,7 +54,6 @@ token = get_access_token()
 
 if "access_token" not in token:
     st.error("❌ Error obteniendo access_token")
-    st.code(token)
 
 else:
     access_token = token["access_token"]
@@ -96,8 +95,28 @@ with c9:
     st.metric(label="💵 Balance", value=f"${balance:,.0f}")
 
 
-# -----------------------------------------------------------------------------------------------------------------------------
 
+st.sidebar.title("Filtros 🔠")
+
+
+# Paso 1: Crear una lista de opciones para el filtro, incluyendo "Ninguno"
+Opcion_Categoría  = ['Ninguno'] + list(df_tracking['Categoría'].unique())
+Categoria = st.sidebar.selectbox('Seleccione la Categoría', Opcion_Categoría)
+
+
+df_tracking["Mes"] = pd.to_datetime(df_tracking["Fecha"], dayfirst=True, errors="coerce").dt.to_period("M").astype(str)
+Mes = st.sidebar.selectbox("Seleccione el mes", ["Ninguno"] + sorted(df_tracking["Mes"].dropna().unique()))
+
+
+if Categoria != 'Ninguno':
+    df_tracking = df_tracking[df_tracking['Categoría'] == Categoria]
+
+df_tracking["Mes"] = pd.to_datetime(df_tracking["Fecha"], dayfirst=True, errors="coerce").dt.to_period("M").astype(str)
+
+if Mes != "Ninguno": df_tracking = df_tracking[df_tracking["Mes"] == Mes]
+
+# -----------------------------------------------------------------------------------------------------------------------------
+  
 
 def figura1():
     df_tracking["Fecha"] = pd.to_datetime(df_tracking["Fecha"], dayfirst=True, errors="coerce")
@@ -116,6 +135,7 @@ def figura1():
     )
 
     fig.update_layout(title_font=dict(size=20))
+
     return fig
 
 
@@ -158,40 +178,47 @@ def figura2():
 
 # -----------------------------------------------------------------------------------------------------------------------------
 
+#Ejemplo de una buena grafica de barras!!!
 def figura3():
-    # Leer datos
-    df_tracking
-    df_grafica3 = df_tracking.groupby(["Concepto"])["Monto"].sum().reset_index()
+    df_tracking["Fecha"] = pd.to_datetime(df_tracking["Fecha"], dayfirst=True, errors="coerce")
 
-    # Crear gráfica
+    df = df_tracking[df_tracking["Concepto"].isin(["Ingreso", "Gasto"])].copy()
+    df["Mes"] = df["Fecha"].dt.to_period("M").astype(str)
+
+    df_mes = df.groupby(["Mes", "Concepto"])["Monto"].sum().reset_index()
+
     fig = px.bar(
-        df_grafica3,
-        x="Concepto",
+        df_mes,
+        x="Mes",
         y="Monto",
         color="Concepto",
+        title="Balance mensual",
         text="Monto",
-        title="Tracking de deudas",
-        #labels={'VENTA_PERDIDA_PESOS': 'Venta Perdida en Pesos (M)'},
-        #hover_data={'% Venta Perdida': ':.1f'}
+        barmode="group"   # usa "stack" si quieres apilado
     )
 
-    fig.update_layout(
-        xaxis_title="Concepto",
-        yaxis_title="Monto ($)",
-        #title_x=0.5,
-        barmode='stack',
-        title_font=dict(size=20),
-        #height=400,
+    fig.update_layout(title_font=dict(size=20))
+
+    fig.update_traces(
+        texttemplate='$%{text:,.0f}',
+        textposition='outside',
+        hovertemplate='Mes: %{x}<br>%{fullData.name}: $%{y:,.0f}<extra></extra>'
     )
-    
+
     return fig
 
+# -----------------------------------------------------------------------------------------------------------------------------
 
+#Listado de graficas
 figura1_grafica = figura1()
 figura2_grafica = figura2()
 figura3_grafica = figura3()
+#figura5_grafica = figura5()
+#figura6_grafica = figura6()
 
-c1, c2, c3 = st.columns([4, 3, 4])
+
+#Barra 1
+c3, c2, c1 = st.columns([4, 3, 4])
 with c1:
     st.plotly_chart(figura1_grafica, use_container_width=True)
 
@@ -200,4 +227,3 @@ with c2:
 
 with c3:
     st.plotly_chart(figura3_grafica, use_container_width=True)
-
