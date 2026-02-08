@@ -2,6 +2,10 @@ import streamlit as st
 import pandas as pd
 from pathlib import Path
 from io import BytesIO
+import requests
+import io
+import openpyxl
+
 
 st.title("🤖 Resumen semanal")
 st.markdown("La finalidad de esta segunda parte, es ingresar todo tip de movimiento registrado en mi día a día", unsafe_allow_html=True)
@@ -67,8 +71,40 @@ else:
 
 # -----------------------------------------------------------------------------------------------------------------------------
 
-# Leer SOLO la hoja Movimientos
-df_tracking = pd.read_excel(TRACKING_PATH, sheet_name="Registro")
+def append_row_to_onedrive_excel(access_token, file_id, sheet_name, row_dict):
+    url = f"https://graph.microsoft.com/v1.0/me/drive/items/{file_id}/content"
+
+    # 1) Descargar xlsx
+    r = requests.get(url, headers={"Authorization": f"Bearer {access_token}"})
+    r.raise_for_status()
+    xlsx_bytes = r.content
+
+    # 2) Abrir + append 1 fila en la hoja
+    wb = openpyxl.load_workbook(io.BytesIO(xlsx_bytes))
+    ws = wb[sheet_name]
+
+    headers = [c.value for c in ws[1]]  # fila 1 = headers
+    col = {h: i+1 for i, h in enumerate(headers) if h}
+
+    next_row = ws.max_row + 1
+    for k, v in row_dict.items():
+        ws.cell(row=next_row, column=col[k], value=v)
+
+    # 3) Guardar a bytes
+    out = io.BytesIO()
+    wb.save(out)
+    out.seek(0)
+
+    # 4) Subir de vuelta el MISMO archivo
+    r2 = requests.put(
+        url,
+        headers={
+            "Authorization": f"Bearer {access_token}",
+            "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        },
+        data=out.getvalue(),
+    )
+    r2.raise_for_status()
 
 # Inputs
 Nombre = st.text_input("🖋️ Ingresa la Descripción:")
@@ -78,20 +114,23 @@ fecha = st.date_input("🗓️ Selecciona la fecha:")
 
 Submit = st.button("Ingresar")
 
-if Submit:
-    new_row = pd.DataFrame([{
-        "Fecha": pd.to_datetime(fecha),
+if Submit and tracking_file:
+    new_row = {
+        "Fecha": fecha,                 # st.date_input ya da date
         "Categoría": Categoria,
         "Descripción": Nombre,
-        "Monto": float(Cantidad)
-    }])
+        "Monto": float(Cantidad),
+        # "Concepto": "Gasto",          # si tu hoja lo tiene, agrégalo
+    }
 
-    df_tracking = pd.concat([df_tracking, new_row], ignore_index=True)
+    append_row_to_onedrive_excel(
+        access_token,
+        tracking_file["id"],
+        "Registro",
+        new_row
+    )
 
-    # Guardar de vuelta AL MISMO archivo (sobrescribe solo Movimientos)
-    with pd.ExcelWriter(TRACKING_PATH, engine="openpyxl", mode="a", if_sheet_exists="replace") as writer:
-        df_tracking.to_excel(writer, index=False, sheet_name="Registro")
-
-    st.success("✅ Guardado en Tracking.xlsx (hoja Registro)")
+    st.cache_data.clear()   # IMPORTANTÍSIMO: si no, verás el excel viejo
+    st.success("✅ Se agregó la nueva línea en OneDrive (Tracking.xlsx → Registro)")
     st.rerun()
 
