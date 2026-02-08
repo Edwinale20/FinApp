@@ -6,13 +6,66 @@ from io import BytesIO
 st.title("🤖 Resumen semanal")
 st.markdown("La finalidad de esta segunda parte, es ingresar todo tip de movimiento registrado en mi día a día", unsafe_allow_html=True)
 
+# -----------------------------------------------------------------------------------------------------------------------------
+
+cfg = st.secrets["onedrive"]
+CLIENT_ID = cfg["client_id"]
+CLIENT_SECRET = cfg["client_secret"]
+REFRESH_TOKEN = cfg["refresh_token"]
+REDIRECT_URI = cfg["redirect_uri"]
+
+def get_access_token():
+    url = "https://login.microsoftonline.com/consumers/oauth2/v2.0/token"
+    data = {
+        "client_id": CLIENT_ID,
+        "client_secret": CLIENT_SECRET,
+        "refresh_token": REFRESH_TOKEN,
+        "grant_type": "refresh_token",
+        "redirect_uri": REDIRECT_URI,
+        "scope": "Files.ReadWrite Files.Read.All User.Read offline_access"
+    }
+    r = requests.post(url, data=data)
+    return r.json()
+
+@st.cache_data
+def list_excel_files(access_token):
+    url = "https://graph.microsoft.com/v1.0/me/drive/root:/FinApp:/children"
+    headers = {"Authorization": f"Bearer {access_token}"}
+    r = requests.get(url, headers=headers).json()
+
+    return [f for f in r.get("value", []) if f["name"].lower().endswith(".xlsx")]
+
+@st.cache_data
+def download_excel_df(access_token, file_id):
+    url = f"https://graph.microsoft.com/v1.0/me/drive/items/{file_id}/content"
+    headers = {"Authorization": f"Bearer {access_token}"}
+    content = requests.get(url, headers=headers).content
+    return pd.read_excel(io.BytesIO(content))
 
 
-TRACKING_PATH = Path(r"C:\Users\omen0\OneDrive\Documentos\OneDrive\FinApp\Tracking.xlsx")
+# -----------------------------------------------------------------------------------------------------------------------------
 
-if not TRACKING_PATH.exists():
-    st.error(f"❌ No se encontró el archivo: {TRACKING_PATH}")
-    st.stop()
+token = get_access_token()
+
+if "access_token" not in token:
+    st.error("❌ Error obteniendo access_token")
+    st.code(token)
+else:
+    access_token = token["access_token"]
+
+    files = list_excel_files(access_token)
+
+    # Buscar el archivo específico llamado Tracking.xlsx
+    tracking_file = next((f for f in files if f["name"] == "Tracking.xlsx"), None)
+    
+    if tracking_file:
+        df_tracking = download_excel_df(access_token, tracking_file["id"])
+        #df_tracking2 = download_excel_df(access_token, tracking_file["id"], sheet_name="Deudas")  # segunda hoja
+        st.success("✅ Archivo 'Tracking.xlsx' cargado correctamente.")
+    else:
+        st.error("❌ No se encontró el archivo 'Tracking.xlsx' en la carpeta FinApp.")
+
+# -----------------------------------------------------------------------------------------------------------------------------
 
 # Leer SOLO la hoja Movimientos
 df_tracking = pd.read_excel(TRACKING_PATH, sheet_name="Registro")
