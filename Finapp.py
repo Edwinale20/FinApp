@@ -9,7 +9,7 @@ st.set_page_config(page_title="FinApp", page_icon="💸", layout="wide")
 
 st.title("💸 FinApp de Pepe")
 st.markdown("✅ Datos en tiempo real", unsafe_allow_html=True)
-st.markdown("🧮 KPI´s principales", unsafe_allow_html=True)
+st.subheader("📋 KPI´s principales")
 
 # ---------------- CONFIG ----------------
 cfg = st.secrets["onedrive"]
@@ -177,8 +177,6 @@ def figura2():
 
 
 # -----------------------------------------------------------------------------------------------------------------------------
-
-#Ejemplo de una buena grafica de barras!!!
 def figura3():
     df_tracking["Fecha"] = pd.to_datetime(df_tracking["Fecha"], dayfirst=True, errors="coerce")
 
@@ -207,17 +205,45 @@ def figura3():
 
     return fig
 
+
+def figura4():
+
+    df = df_tracking[df_tracking["Concepto"] == "Gasto"].copy()
+    #df["Mes"] = df["Fecha"].dt.to_period("M").astype(str)
+
+    df_mes = df.groupby(["Categoría", "Concepto"])["Monto"].sum().reset_index()
+
+    fig = px.bar(
+        df_mes,
+        x="Categoría",
+        y="Monto",
+        color="Concepto",
+        title="Seguimiento de deudas",
+        text="Monto",
+        barmode="group"   # usa "stack" si quieres apilado
+    )
+
+    fig.update_layout(title_font=dict(size=20))
+
+    fig.update_traces(
+        texttemplate='$%{text:,.0f}',
+        textposition='outside',
+        hovertemplate='Mes: %{x}<br>%{fullData.name}: $%{y:,.0f}<extra></extra>'
+    )
+
+    return fig
 # -----------------------------------------------------------------------------------------------------------------------------
 
 #Listado de graficas
 figura1_grafica = figura1()
 figura2_grafica = figura2()
 figura3_grafica = figura3()
-#figura5_grafica = figura5()
+figura4_grafica = figura4()
 #figura6_grafica = figura6()
 
-
 #Barra 1
+st.divider()
+st.subheader("_Seguimiento de_ :green[Finanzas personales]")
 c3, c2, c1 = st.columns([4, 3, 4])
 with c1:
     st.plotly_chart(figura1_grafica, use_container_width=True)
@@ -227,3 +253,11 @@ with c2:
 
 with c3:
     st.plotly_chart(figura3_grafica, use_container_width=True)
+
+#Barra 2
+st.divider()
+st.subheader("_Seguimiento de_ :blue[metas] :sunglasses:")
+c4, c5, c6 = st.columns([4, 3, 4])
+with c4:
+    st.plotly_chart(figura4_grafica, use_container_width=True)
+
