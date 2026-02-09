@@ -8,7 +8,7 @@ import openpyxl
 
 
 st.title("🤖 Resumen semanal")
-st.markdown("La finalidad de esta segunda parte, es ingresar todo tip de movimiento registrado en mi día a día", unsafe_allow_html=True)
+st.markdown("La finalidad de esta segunda parte, es ingresar todo tipo de movimiento bancario registrado en mi día a día y almacenarlo en la Base de Datos", unsafe_allow_html=True)
 
 # -----------------------------------------------------------------------------------------------------------------------------
 
