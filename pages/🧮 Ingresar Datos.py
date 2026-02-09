@@ -120,7 +120,7 @@ if Submit and tracking_file:
         "Categoría": Categoria,
         "Descripción": Nombre,
         "Monto": float(Cantidad),
-        # "Concepto": "Gasto",          # si tu hoja lo tiene, agrégalo
+        "Concepto": "Ingreso" if Categoria == "💰Ingreso" else "Gasto",
     }
 
     append_row_to_onedrive_excel(
