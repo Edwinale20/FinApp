@@ -109,7 +109,7 @@ def append_row_to_onedrive_excel(access_token, file_id, sheet_name, row_dict):
 # Inputs
 Nombre = st.text_input("🖋️ Ingresa la Descripción:")
 Cantidad = st.number_input("💲Ingresa el monto:")
-Categoria = st.selectbox("📌 Tipo", ["💰Ingreso", "Deuda", "Tarjeta BBVA", "Tarjeta AMEX", "Prestamo TEC", "Carro", "Gastos hormiga", "Bellakeo", "Servicios", "Otros gastos"])
+Categoria = st.selectbox("📌 Tipo", ["💰Ingreso", "Deuda", "Tarjeta BBVA", "Tarjeta AMEX", "Prestamo TEC", "Carro", "Gastos hormiga", "Gasolina", "Bellakeo", "Servicios", "Otros gastos"])
 fecha = st.date_input("🗓️ Selecciona la fecha:")
 
 Submit = st.button("Ingresar")
